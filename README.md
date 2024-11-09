@@ -2,6 +2,9 @@
 
 LemonSqueezy is a Python library for interacting with the LemonSqueezy API. It provides a simple and intuitive interface for managing license keys, checkouts, webhooks, usage records, discounts, and more.
 
+-- Under Construction --
+Interested in this project? Leave a ⭐️ or watch the repo to let me know!
+
 ## Features
 
 - List, create, retrieve, update, and delete license keys
@@ -20,7 +23,7 @@ pip install lemonsqueezy
 
 ## Ussage
 
---Under construction--
+-- Under Construction --
 
 ## Contributing
 
