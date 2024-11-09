@@ -1,7 +1,7 @@
 [project]
 name = "lemonsqueezy"
 version = "0.1.0"
-description = "Add your description here"
+description = "LemonSqueezy is a Python library for interacting with the LemonSqueezy API."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
