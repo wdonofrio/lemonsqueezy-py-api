@@ -1,6 +1,6 @@
-# LemonSqueezy
+# LemonSqueezy Py API
 
-LemonSqueezy is a Python library for interacting with the LemonSqueezy API. It provides a simple and intuitive interface for managing license keys, checkouts, webhooks, usage records, discounts, and more.
+LemonSqueezy Py API is an unofficial Python library for interacting with the LemonSqueezy API. It provides a simple and intuitive interface for managing license keys, checkouts, webhooks, usage records, discounts, and more.
 
 Interested in this project? Leave a ⭐️ or watch the repo to stay informed in our progress!
 
