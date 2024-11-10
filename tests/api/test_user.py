@@ -1,4 +1,4 @@
-from lemonsqueezy.api import get_user
+from lemonsqueezy.api.user import get_user
 from lemonsqueezy.models import User
 
 
