@@ -29,6 +29,8 @@ A customer object represents a customer of your store. It is created when they p
 
 """
 
+from typing import Optional
+
 from pydantic import BaseModel, Field
 
 from lemonsqueezy.models import BaseEntity
@@ -43,7 +45,7 @@ class Customer(BaseEntity):
         class URLs(BaseModel):
             """The URLs sub-object in the Attributes sub-object"""
 
-            customer_portal: str
+            customer_portal: Optional[str]
 
         store_id: int
         name: str
@@ -102,3 +104,50 @@ class CustomerCreate(BaseModel):
         relationships: Relationships
 
     data: Data
+
+
+class Links(BaseModel):
+    """The Links sub-object"""
+
+    related: str
+    self_: str = Field(..., alias="self")
+
+
+class CustomerList(Customer):
+    """The Customer List Object"""
+
+    class Relationships(BaseModel):
+        """The Relationships sub-object in the Customer List Object"""
+
+        class Store(BaseModel):
+            """The Store sub-object in the Relationships sub-object"""
+
+            links: Links
+
+        class Orders(BaseModel):
+            """The Orders sub-object in the Relationships Object"""
+
+            links: Links
+
+        class Subscriptions(BaseModel):
+            """The Subscriptions sub-object in the Relationships Object"""
+
+            links: Links
+
+        class LicenseKeys(BaseModel):
+            """The LicenseKeys sub-object in the Relationships Object"""
+
+            links: Links
+
+        store: Store
+        orders: Orders
+        subscriptions: Subscriptions
+        license_keys: LicenseKeys  #  = Field(..., alias="license-keys")
+
+    class Links_(BaseModel):
+        """The Links sub-object in the Customer List Object"""
+
+        self_: str = Field(..., alias="self")
+
+    relationships: Relationships
+    links: Links_
