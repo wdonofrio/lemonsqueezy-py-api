@@ -2,7 +2,7 @@ import requests
 
 from lemonsqueezy.api import BASE_URL, get_headers
 from lemonsqueezy.api.errors import handle_http_errors
-from lemonsqueezy.models import Customer, CustomerCreate, CustomerList
+from lemonsqueezy.models import Customer, CustomerCreate, CustomerList, CustomerPatch
 
 
 @handle_http_errors
@@ -31,11 +31,20 @@ def get_customer(customer_id: str):
 
 
 @handle_http_errors
-def update_customer(customer_id: str):
+def update_customer(customer_data: CustomerPatch):
     """Update a customer"""
+    if (customer_id := customer_data.data.dict(by_alias=True).get("id")) is None:
+        raise ValueError("Customer ID is required in CustomerPatch data.")
+
     response = requests.patch(
-        f"{BASE_URL}/customers/{customer_id}", headers=get_headers(), timeout=30
+        f"{BASE_URL}/customers/{customer_id}",
+        headers=get_headers(),
+        json=customer_data.dict(by_alias=True),
+        timeout=30,
     )
+    response.raise_for_status()
+    customer_data = response.json().get("data", {})
+    return Customer(**customer_data)
 
 
 @handle_http_errors
@@ -53,7 +62,7 @@ def list_customers(page: int = 1, per_page: int = 10) -> list[CustomerList]:
 
         customers_data = response_data.get("data", [])
         for customer_data in customers_data:
-            # TODO: Investage why this translation was needed and alias didn't work
+            # TODO: Investigate why this translation was needed and alias didn't work
             if "license-keys" in customer_data["relationships"]:
                 customer_data["relationships"]["license_keys"] = customer_data[
                     "relationships"

@@ -106,6 +106,24 @@ class CustomerCreate(BaseModel):
     data: Data
 
 
+class CustomerPatch(BaseModel):
+    """The Customer Object for updating a customer"""
+
+    class Data(BaseEntity):
+        """The Data sub-object in the Customer Object"""
+
+        class Attributes(BaseModel):
+            """The Attributes sub-object in the Customer Object"""
+
+            name: str
+            email: str
+            status: str
+
+        attributes: Attributes
+
+    data: Data
+
+
 class Links(BaseModel):
     """The Links sub-object"""
 
