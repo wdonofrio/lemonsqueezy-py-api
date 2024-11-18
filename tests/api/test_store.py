@@ -5,9 +5,8 @@ from lemonsqueezy.api.store import get_store, list_stores
 from lemonsqueezy.models import Store
 
 
-@pytest.mark.skip("Not implemented due to lack of valid store data.")
-def test_get_store():
-    store = get_store("1")
+def test_get_store(store_id):
+    store = get_store(store_id)
     assert isinstance(store, Store)
 
 

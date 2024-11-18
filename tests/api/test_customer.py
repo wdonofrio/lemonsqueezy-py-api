@@ -11,7 +11,7 @@ from lemonsqueezy.models import Customer, CustomerCreate, CustomerList, Customer
 
 
 @pytest.fixture
-def customer_create():
+def customer_create(store_id):
     return CustomerCreate(
         data=CustomerCreate.Data(
             type="customers",
@@ -25,7 +25,7 @@ def customer_create():
             relationships=CustomerCreate.Data.Relationships(
                 store=CustomerCreate.Data.Relationships.Store(
                     data=CustomerCreate.Data.Relationships.Store.StoreData(
-                        type="stores", id="1"
+                        type="stores", id=store_id
                     )
                 )
             ),
@@ -34,11 +34,11 @@ def customer_create():
 
 
 @pytest.fixture
-def customer_patch():
+def customer_patch(customer_id):
     return CustomerPatch(
         data=CustomerPatch.Data(
             type="customers",
-            id="1",
+            id=customer_id,
             attributes=CustomerPatch.Data.Attributes(
                 name="John Doe", email="johndoe@example.com", status="archived"
             ),
@@ -46,15 +46,15 @@ def customer_patch():
     )
 
 
-@pytest.mark.skip("Not implemented due to lack of valid store data.")
 def test_create_customer(customer_create):
-    customer = create_customer(customer_create)
-    assert isinstance(customer, Customer)
+    with pytest.raises(LemonSqueezyClientError) as exc_info:
+        create_customer(customer_create)
+
+    assert exc_info.value.status_code == 422  # Customer already exists
 
 
-@pytest.mark.skip("Not implemented due to lack of valid customer data.")
-def test_get_customer():
-    customer = get_customer("1")
+def test_get_customer(customer_id):
+    customer = get_customer(customer_id)
     assert isinstance(customer, Customer)
 
 
@@ -65,7 +65,6 @@ def test_get_customer_invalid():
     assert exc_info.value.status_code == 404
 
 
-@pytest.mark.skip("Not implemented due to lack of valid customer data.")
 def test_update_customer(customer_patch):
     customer = update_customer(customer_patch)
     assert isinstance(customer, Customer)
