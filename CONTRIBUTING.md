@@ -26,4 +26,16 @@ This project uses [UV](https://docs.astral.sh/uv/). Ensure UV is installed befor
 
 ### Testing
 
--- Under Construction --
+Run tests often to verify changes have not had unexpected side-effects.
+
+#### Pre-Commit
+
+This project uses pre-commit.  
+Run `uv run pre-commit install` so that pre-commit is executed on commit.
+
+Alternatively, `uv run pre-commit run -a` will test the codebase.
+
+#### Pytest
+
+This project uses pytest for unit-testing.  
+Run `uv run pytest` to execute all tests.
