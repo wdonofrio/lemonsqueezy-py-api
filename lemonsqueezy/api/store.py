@@ -6,7 +6,7 @@ from lemonsqueezy.models import Store
 
 
 @handle_http_errors
-def get_store(store_id: str) -> Store:
+def get_store(store_id: str | int) -> Store:
     """Get the store"""
     response = requests.get(
         f"{BASE_URL}/stores/{store_id}", headers=get_headers(), timeout=30

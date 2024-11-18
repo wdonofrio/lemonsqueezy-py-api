@@ -6,7 +6,7 @@ from lemonsqueezy.models import Customer, CustomerCreate, CustomerList, Customer
 
 
 @handle_http_errors
-def create_customer(customer_data: CustomerCreate):
+def create_customer(customer_data: CustomerCreate) -> Customer:
     """Create a customer"""
     response = requests.post(
         f"{BASE_URL}/customers",
@@ -20,7 +20,7 @@ def create_customer(customer_data: CustomerCreate):
 
 
 @handle_http_errors
-def get_customer(customer_id: str):
+def get_customer(customer_id: str | int) -> Customer:
     """Get a customer"""
     response = requests.get(
         f"{BASE_URL}/customers/{customer_id}", headers=get_headers(), timeout=30
@@ -31,7 +31,7 @@ def get_customer(customer_id: str):
 
 
 @handle_http_errors
-def update_customer(customer_data: CustomerPatch):
+def update_customer(customer_data: CustomerPatch) -> Customer:
     """Update a customer"""
     if (customer_id := customer_data.data.dict(by_alias=True).get("id")) is None:
         raise ValueError("Customer ID is required in CustomerPatch data.")
