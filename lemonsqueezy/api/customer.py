@@ -2,7 +2,12 @@ import requests
 
 from lemonsqueezy.api import BASE_URL, get_headers
 from lemonsqueezy.api.errors import handle_http_errors
-from lemonsqueezy.models import Customer, CustomerCreate, CustomerList, CustomerPatch
+from lemonsqueezy.models.customer import (
+    Customer,
+    CustomerCreate,
+    CustomerList,
+    CustomerPatch,
+)
 
 
 @handle_http_errors
@@ -11,12 +16,12 @@ def create_customer(customer_data: CustomerCreate) -> Customer:
     response = requests.post(
         f"{BASE_URL}/customers",
         headers=get_headers(),
-        json=customer_data.dict(by_alias=True),
+        json=customer_data.model_dump(by_alias=True),
         timeout=30,
     )
     response.raise_for_status()
-    customer_data = response.json().get("data", {})
-    return Customer(**customer_data)
+    response_data = response.json().get("data", {})
+    return Customer(**response_data)
 
 
 @handle_http_errors
@@ -33,18 +38,18 @@ def get_customer(customer_id: str | int) -> Customer:
 @handle_http_errors
 def update_customer(customer_data: CustomerPatch) -> Customer:
     """Update a customer"""
-    if (customer_id := customer_data.data.dict(by_alias=True).get("id")) is None:
+    if (customer_id := customer_data.data.model_dump(by_alias=True).get("id")) is None:
         raise ValueError("Customer ID is required in CustomerPatch data.")
 
     response = requests.patch(
         f"{BASE_URL}/customers/{customer_id}",
         headers=get_headers(),
-        json=customer_data.dict(by_alias=True),
+        json=customer_data.model_dump(by_alias=True),
         timeout=30,
     )
     response.raise_for_status()
-    customer_data = response.json().get("data", {})
-    return Customer(**customer_data)
+    response_data = response.json().get("data", {})
+    return Customer(**response_data)
 
 
 @handle_http_errors

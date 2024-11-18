@@ -7,7 +7,12 @@ from lemonsqueezy.api.customer import (
     update_customer,
 )
 from lemonsqueezy.api.errors import LemonSqueezyClientError
-from lemonsqueezy.models import Customer, CustomerCreate, CustomerList, CustomerPatch
+from lemonsqueezy.models.customer import (
+    Customer,
+    CustomerCreate,
+    CustomerList,
+    CustomerPatch,
+)
 
 
 @pytest.fixture

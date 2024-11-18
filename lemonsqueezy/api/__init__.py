@@ -1,9 +1,11 @@
+from typing import Dict
+
 from lemonsqueezy.config import settings
 
 BASE_URL = settings.api_url
 
 
-def get_headers() -> dict:
+def get_headers() -> Dict[str, str]:
     """Get the headers for the request"""
     return {
         "Accept": "application/vnd.api+json",

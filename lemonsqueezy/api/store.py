@@ -2,7 +2,7 @@ import requests
 
 from lemonsqueezy.api import BASE_URL, get_headers
 from lemonsqueezy.api.errors import handle_http_errors
-from lemonsqueezy.models import Store
+from lemonsqueezy.models.store import Store
 
 
 @handle_http_errors

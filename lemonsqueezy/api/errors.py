@@ -1,4 +1,5 @@
 from functools import wraps
+from typing import Any, Callable, Dict
 
 import requests
 
@@ -6,7 +7,9 @@ import requests
 class LemonSqueezyError(Exception):
     """Base class for LemonSqueezy API errors."""
 
-    def __init__(self, message: str, status_code: int, response_json: dict):
+    def __init__(
+        self, message: str, status_code: int, response_json: Dict[str, Any]
+    ) -> None:
         super().__init__(message)
         self.status_code = status_code
         self.response_json = response_json
@@ -20,9 +23,9 @@ class LemonSqueezyServerError(LemonSqueezyError):
     """Base class for LemonSqueezy API server errors. (5xx)"""
 
 
-def handle_http_errors(func):
+def handle_http_errors(func: Callable[..., Any]) -> Callable[..., Any]:
     @wraps(func)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
         try:
             return func(*args, **kwargs)
         except requests.exceptions.HTTPError as e:

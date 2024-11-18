@@ -12,9 +12,25 @@ dependencies = [
 
 [tool.uv]
 dev-dependencies = [
+    "ipykernel>=6.29.5",
     "lemonsqueezy",
+    "mypy>=1.13.0",
+    "pre-commit>=4.0.1",
+    "pydantic[mypy]>=2.9.2",
     "pytest>=8.3.3",
+    "ruff>=0.7.4",
 ]
 
 [tool.uv.sources]
 lemonsqueezy = { workspace = true }
+
+
+[tool.mypy]
+plugins = ["pydantic.mypy"]
+ignore_missing_imports = true
+exclude = "tests/"
+
+[dependency-groups]
+types = [
+    "types-requests>=2.32.0.20241016",
+]

@@ -6,7 +6,7 @@ Thanks for taking the time to contribute!
 
 ### Report an Issue
 
-Simplest way to contribute is to report an Issue.  
+Simplest way to contribute is to report an Issue.
 If you encounter a bug or have a feature request, let us know!
 
 ### Documentation
