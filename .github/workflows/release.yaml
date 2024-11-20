@@ -1,0 +1,37 @@
+name: Publish Python Package
+
+on:
+  push:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+      - "[0-9]+.[0-9]+.[0-9]+a[0-9]+"
+      - "[0-9]+.[0-9]+.[0-9]+b[0-9]+"
+      - "[0-9]+.[0-9]+.[0-9]+rc[0-9]+"
+  workflow_dispatch:
+
+env:
+  PACKAGE_NAME: "lemonsqueezy-api"
+  OWNER: "wdonofrio"
+
+jobs:
+  publish:
+    name: Build & Publish to PyPi
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+
+      - name: Install UV
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+
+      - name: Build package
+        run: uv build
+
+      - name: Publish package
+        run: uv publish --package-name $PACKAGE_NAME --owner $OWNER
