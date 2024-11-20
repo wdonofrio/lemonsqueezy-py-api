@@ -16,7 +16,6 @@ dev-dependencies = [
     "lemonsqueezy",
     "mypy>=1.13.0",
     "pre-commit>=4.0.1",
-    "pydantic[mypy]>=2.9.2",
     "pytest>=8.3.3",
     "ruff>=0.7.4",
 ]
