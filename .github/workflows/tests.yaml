@@ -33,4 +33,6 @@ jobs:
         run: uv run pre-commit run --all-files
 
       - name: Run Pytest
+        env:
+          LEMONSQUEEZY_API_KEY: ${{ secrets.LEMONSQUEEZY_API_KEY }}
         run: uv run pytest
