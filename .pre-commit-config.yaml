@@ -14,18 +14,18 @@ repos:
     hooks:
       - id: ruff-lint
         name: ruff-lint
-        entry: ruff
+        entry: uv run ruff
         language: system
         types: [python]
         args: ["check", "."]
       - id: ruff-format
         name: ruff-format
-        entry: ruff
+        entry: uv run ruff
         language: system
         types: [python]
         args: ["format", "."]
       - id: mypy
         name: mypy
-        entry: mypy
+        entry: uv run mypy
         language: system
         types: [python]

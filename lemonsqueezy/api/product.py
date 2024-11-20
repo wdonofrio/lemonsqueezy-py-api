@@ -29,11 +29,6 @@ def list_products(page: int = 1, per_page: int = 10) -> list[Product]:
         response_data = response.json()
 
         for product_data in response_data.get("data", []):
-            # TODO: Investigate why this translation was needed and alias didn't work
-            if "license-keys" in product_data["relationships"]:
-                product_data["relationships"]["license_keys"] = product_data[
-                    "relationships"
-                ].pop("license-keys")
             products.append(Product(**product_data))
 
         meta = response_data.get("meta", {}).get("page", {})
