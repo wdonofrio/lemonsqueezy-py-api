@@ -5,6 +5,7 @@ import pytest
 from lemonsqueezy.api.customer import list_customers
 from lemonsqueezy.api.product import list_products
 from lemonsqueezy.api.store import list_stores
+from lemonsqueezy.api.variant import list_variants
 
 
 @pytest.fixture
@@ -26,3 +27,10 @@ def product_id():
     products = list_products()
     assert products != [], "No products available."
     return products[int(random() * len(products))].id_
+
+
+@pytest.fixture
+def variant_id():
+    variants = list_variants()
+    assert variants != [], "No variants available."
+    return variants[int(random() * len(variants))].id_

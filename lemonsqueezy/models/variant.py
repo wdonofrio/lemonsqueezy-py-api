@@ -36,43 +36,12 @@ A variant represents a variation of a Product, with its own set of pricing optio
 
 """
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from lemonsqueezy.models import BaseEntity
 
 
-class Attributes(BaseModel):
-    """The Attributes sub-object in the Variant Object"""
-
-    product_id: int
-    name: str
-    slug: str
-    description: str
-    price: int
-    is_subscription: bool
-    interval: str
-    interval_count: int
-    has_free_trial: bool
-    trial_interval: str
-    trial_interval_count: int
-    pay_what_you_want: bool
-    min_price: int
-    suggested_price: int
-    has_license_keys: bool
-    license_activation_limit: int
-    is_license_limit_unlimited: bool
-    license_length_value: int
-    license_length_unit: str
-    is_license_length_unlimited: bool
-    sort: int
-    status: str
-    status_formatted: str
-    created_at: str
-    updated_at: str
-    test_mode: bool
-
-
-class Variant(BaseEntity):
+class _Variant(BaseEntity):
     """The Variant Object"""
 
     class Attributes(BaseModel):
@@ -106,3 +75,66 @@ class Variant(BaseEntity):
         test_mode: bool
 
     attributes: Attributes
+
+
+class _Relationships(BaseModel):
+    """The Relationships sub-object in the Variant Object"""
+
+    class Product(BaseModel):
+        """The Product sub-object in the Relationships sub-object"""
+
+        class Links(BaseModel):
+            """The Links sub-object in the Product sub-object"""
+
+            related: str
+            self_: str = Field(..., alias="self")
+
+        links: Links
+
+    product: Product
+
+
+class VariantList(_Variant):
+    """The Variant List Object"""
+
+    class Links(BaseModel):
+        """The Links sub-object in the Variant Object"""
+
+        self_: str = Field(..., alias="self")
+
+    relationships: _Relationships
+    links: Links
+
+
+class Variant(VariantList):
+    """The Variant Object"""
+
+    class Relationships(_Relationships):
+        """The Relationships sub-object in the Variant Object"""
+
+        class Files(BaseModel):
+            """The Files sub-object in the Variant Object"""
+
+            class Links(BaseModel):
+                """The Links sub-object in the Files sub-object"""
+
+                related: str
+                self_: str = Field(..., alias="self")
+
+            links: Links
+
+        class PriceModel(BaseModel):
+            """The PriceModel sub-object in the Variant Object"""
+
+            class Links(BaseModel):
+                """The Links sub-object in the PriceModel sub-object"""
+
+                related: str
+                self_: str = Field(..., alias="self")
+
+            links: Links
+
+        files: Files
+        price_model: PriceModel = Field(..., alias="price-model")
+
+    relationships: Relationships
