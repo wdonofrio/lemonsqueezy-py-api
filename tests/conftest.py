@@ -3,6 +3,7 @@ from random import random
 import pytest
 
 from lemonsqueezy.api.customer import list_customers
+from lemonsqueezy.api.product import list_products
 from lemonsqueezy.api.store import list_stores
 
 
@@ -18,3 +19,10 @@ def customer_id():
     customers = list_customers()
     assert customers != [], "No customers available."
     return customers[int(random() * len(customers))].id_
+
+
+@pytest.fixture
+def product_id():
+    products = list_products()
+    assert products != [], "No products available."
+    return products[int(random() * len(products))].id_

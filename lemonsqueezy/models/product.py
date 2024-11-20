@@ -30,12 +30,14 @@ Products describe digital goods you offer to your customers.
 
 """
 
-from pydantic import BaseModel
+from typing import Optional
+
+from pydantic import BaseModel, Field
 
 from lemonsqueezy.models import BaseEntity
 
 
-class Product(BaseEntity):
+class _Product(BaseEntity):
     """The Product Object"""
 
     class Attributes(BaseModel):
@@ -47,18 +49,58 @@ class Product(BaseEntity):
         description: str
         status: str
         status_formatted: str
-        thumb_url: str
-        large_thumb_url: str
+        thumb_url: Optional[str]
+        large_thumb_url: Optional[str]
         price: int
         price_formatted: str
-        from_price: int
-        to_price: int
+        from_price: Optional[int]
+        to_price: Optional[int]
         pay_what_you_want: bool
         buy_now_url: str
-        from_price_formatted: str
-        to_price_formatted: str
+        from_price_formatted: Optional[str]
+        to_price_formatted: Optional[str]
         created_at: str
         updated_at: str
         test_mode: bool
 
     attributes: Attributes
+
+
+class Product(_Product):
+    """The Product Retrieved Object"""
+
+    class Relationships(BaseModel):
+        """The Relationships sub-object in the Product Retrieved Object"""
+
+        class Store(BaseModel):
+            """The Store sub-object in the Relationships sub-object"""
+
+            class Links(BaseModel):
+                """The Links sub-object in the Relationships sub-object"""
+
+                self_: str = Field(..., alias="self")
+                related: str
+
+            links: Links
+
+        class Variants(BaseModel):
+            """The Variants sub-object in the Product Retrieved Object"""
+
+            class Links(BaseModel):
+                """The Data sub-object in the Variants sub-object"""
+
+                self_: str = Field(..., alias="self")
+                related: str
+
+            links: Links
+
+        store: Store
+        variants: Variants
+
+    class Links(BaseModel):
+        """The Links sub-object in the Product Retrieved Object"""
+
+        self_: str = Field(..., alias="self")
+
+    relationships: Relationships
+    links: Links
