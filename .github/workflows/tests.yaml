@@ -27,7 +27,7 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
 
       - name: Sync dependencies
-        run: uv sync --all-extras
+        run: uv sync --group dev --group types
 
       - name: Run Pre-commit
         run: uv run pre-commit run --all-files
