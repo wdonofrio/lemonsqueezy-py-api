@@ -3,6 +3,7 @@ from random import random
 import pytest
 
 from lemonsqueezy.api.customer import list_customers
+from lemonsqueezy.api.file import list_files
 from lemonsqueezy.api.prices import list_prices
 from lemonsqueezy.api.product import list_products
 from lemonsqueezy.api.store import list_stores
@@ -42,3 +43,10 @@ def price_id():
     prices = list_prices()
     assert prices != [], "No prices available."
     return prices[int(random() * len(prices))].id_
+
+
+@pytest.fixture
+def file_id():
+    files = list_files()
+    assert files != [], "No files available."
+    return files[int(random() * len(files))].id_
