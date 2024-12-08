@@ -16,6 +16,7 @@ dev-dependencies = [
     "lemonsqueezy",
     "mypy>=1.13.0",
     "pre-commit>=4.0.1",
+    "pytest-cov>=6.0.0",
     "pytest>=8.3.3",
     "ruff>=0.7.4",
 ]
@@ -28,6 +29,9 @@ lemonsqueezy = { workspace = true }
 plugins = ["pydantic.mypy"]
 ignore_missing_imports = true
 exclude = "tests/"
+
+[tool.pytest]
+testpaths = "tests"
 
 [dependency-groups]
 types = [

@@ -36,6 +36,8 @@ A variant represents a variation of a Product, with its own set of pricing optio
 
 """
 
+from typing import Optional
+
 from pydantic import BaseModel, Field
 
 from lemonsqueezy.models import BaseEntity
@@ -53,8 +55,8 @@ class _Variant(BaseEntity):
         description: str
         price: int
         is_subscription: bool
-        interval: str
-        interval_count: int
+        interval: Optional[str]
+        interval_count: Optional[int]
         has_free_trial: bool
         trial_interval: str
         trial_interval_count: int
