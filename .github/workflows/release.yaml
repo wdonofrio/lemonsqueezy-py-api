@@ -15,19 +15,68 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
+
+      - name: Cache UV Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/uv
+          key: ${{ runner.os }}-uv-${{ hashFiles('pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-uv-
 
       - name: Install UV
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
 
+      - name: Get Version
+        id: get_version
+        run: |
+          if [[ "${{ github.ref }}" == "refs/tags/"* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            VERSION=$(grep '^version = ' pyproject.toml | cut -d'"' -f2)
+          else
+            echo "Error: This workflow should only run on tags or manual dispatch"
+            exit 1
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Validate Package Version
+        run: |
+          PACKAGE_VERSION=$(grep '^version = ' pyproject.toml | cut -d'"' -f2)
+          if [ "${{ steps.get_version.outputs.version }}" != "$PACKAGE_VERSION" ]; then
+            echo "Package version ($PACKAGE_VERSION) does not match tag version (${{ steps.get_version.outputs.version }})"
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: uv sync --dev --group types
+
+      - name: Run tests
+        env:
+          LEMONSQUEEZY_API_KEY: ${{ secrets.LEMONSQUEEZY_API_KEY }}
+        run: uv run pytest
+
       - name: Build package
         run: uv build
+
+      - name: Verify build artifacts
+        run: |
+          ls -la dist/
+          if [ ! -f "dist/lemonsqueezy-${{ steps.get_version.outputs.version }}.tar.gz" ]; then
+            echo "Source distribution not found"
+            exit 1
+          fi
+          if [ ! -f "dist/lemonsqueezy-${{ steps.get_version.outputs.version }}-py3-none-any.whl" ]; then
+            echo "Wheel distribution not found"
+            exit 1
+          fi
 
       - name: Publish package
         run: uv publish --token ${{ secrets.PYPI_TOKEN }}
