@@ -51,30 +51,30 @@ def customer_patch(customer_id):
     )
 
 
-def test_create_customer(customer_create):
+def test_create_customer(client, customer_create):
     with pytest.raises(LemonSqueezyClientError) as exc_info:
-        create_customer(customer_create)
+        create_customer(client, customer_create)
 
     assert exc_info.value.status_code == 422  # Customer already exists
 
 
-def test_get_customer(customer_id):
-    customer = get_customer(customer_id)
+def test_get_customer(client, customer_id):
+    customer = get_customer(client, customer_id)
     assert isinstance(customer, Customer)
 
 
-def test_get_customer_invalid():
+def test_get_customer_invalid(client):
     with pytest.raises(LemonSqueezyClientError) as exc_info:
-        get_customer("1")
+        get_customer(client, "1")
 
     assert exc_info.value.status_code == 404
 
 
-def test_update_customer(customer_patch):
-    customer = update_customer(customer_patch)
+def test_update_customer(client, customer_patch):
+    customer = update_customer(client, customer_patch)
     assert isinstance(customer, Customer)
 
 
-def test_list_customers():
-    customers = list_customers()
+def test_list_customers(client):
+    customers = list_customers(client)
     assert all(isinstance(customer, CustomerList) for customer in customers)

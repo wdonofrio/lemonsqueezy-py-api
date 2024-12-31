@@ -1,6 +1,5 @@
 import requests
 
-from lemonsqueezy.api import BASE_URL, get_headers
 from lemonsqueezy.api.errors import handle_http_errors
 from lemonsqueezy.models.customer import (
     Customer,
@@ -8,14 +7,17 @@ from lemonsqueezy.models.customer import (
     CustomerList,
     CustomerPatch,
 )
+from lemonsqueezy.protocols import LemonSqueezyProtocol
 
 
 @handle_http_errors
-def create_customer(customer_data: CustomerCreate) -> Customer:
+def create_customer(
+    client: LemonSqueezyProtocol, customer_data: CustomerCreate
+) -> Customer:
     """Create a customer"""
     response = requests.post(
-        f"{BASE_URL}/customers",
-        headers=get_headers(),
+        f"{client.base_url}/customers",
+        headers=client.headers,
         json=customer_data.model_dump(by_alias=True),
         timeout=30,
     )
@@ -25,10 +27,12 @@ def create_customer(customer_data: CustomerCreate) -> Customer:
 
 
 @handle_http_errors
-def get_customer(customer_id: str | int) -> Customer:
+def get_customer(client: LemonSqueezyProtocol, customer_id: str | int) -> Customer:
     """Get a customer"""
     response = requests.get(
-        f"{BASE_URL}/customers/{customer_id}", headers=get_headers(), timeout=30
+        f"{client.base_url}/customers/{customer_id}",
+        headers=client.headers,
+        timeout=30,
     )
     response.raise_for_status()
     customer_data = response.json().get("data", {})
@@ -36,14 +40,16 @@ def get_customer(customer_id: str | int) -> Customer:
 
 
 @handle_http_errors
-def update_customer(customer_data: CustomerPatch) -> Customer:
+def update_customer(
+    client: LemonSqueezyProtocol, customer_data: CustomerPatch
+) -> Customer:
     """Update a customer"""
     if (customer_id := customer_data.data.model_dump(by_alias=True).get("id")) is None:
         raise ValueError("Customer ID is required in CustomerPatch data.")
 
     response = requests.patch(
-        f"{BASE_URL}/customers/{customer_id}",
-        headers=get_headers(),
+        f"{client.base_url}/customers/{customer_id}",
+        headers=client.headers,
         json=customer_data.model_dump(by_alias=True),
         timeout=30,
     )
@@ -53,13 +59,15 @@ def update_customer(customer_data: CustomerPatch) -> Customer:
 
 
 @handle_http_errors
-def list_customers(page: int = 1, per_page: int = 10) -> list[CustomerList]:
+def list_customers(
+    client: LemonSqueezyProtocol, page: int = 1, per_page: int = 10
+) -> list[CustomerList]:
     """List the customers with pagination"""
     customers = []
     while True:
         response = requests.get(
-            f"{BASE_URL}/customers?page[number]={page}&page[size]={per_page}",
-            headers=get_headers(),
+            f"{client.base_url}/customers?page[number]={page}&page[size]={per_page}",
+            headers=client.headers,
             timeout=30,
         )
         response.raise_for_status()

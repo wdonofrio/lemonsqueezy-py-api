@@ -1,15 +1,17 @@
 import requests
 
-from lemonsqueezy.api import BASE_URL, get_headers
 from lemonsqueezy.api.errors import handle_http_errors
 from lemonsqueezy.models.variant import Variant
+from lemonsqueezy.protocols import LemonSqueezyProtocol
 
 
 @handle_http_errors
-def get_variant(variant_id: str | int) -> Variant:
+def get_variant(client: LemonSqueezyProtocol, variant_id: str | int) -> Variant:
     """Get the variant"""
     response = requests.get(
-        f"{BASE_URL}/variants/{variant_id}", headers=get_headers(), timeout=30
+        f"{client.base_url}/variants/{variant_id}",
+        headers=client.headers,
+        timeout=30,
     )
     response.raise_for_status()
     variant_data = response.json().get("data", {})
@@ -17,13 +19,15 @@ def get_variant(variant_id: str | int) -> Variant:
 
 
 @handle_http_errors
-def list_variants(page: int = 1, per_page: int = 10) -> list[Variant]:
+def list_variants(
+    client: LemonSqueezyProtocol, page: int = 1, per_page: int = 10
+) -> list[Variant]:
     """List the variants with pagination"""
     variants = []
     while True:
         response = requests.get(
-            f"{BASE_URL}/variants?page[number]={page}&page[size]={per_page}",
-            headers=get_headers(),
+            f"{client.base_url}/variants?page[number]={page}&page[size]={per_page}",
+            headers=client.headers,
             timeout=30,
         )
         response.raise_for_status()
