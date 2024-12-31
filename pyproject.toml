@@ -1,6 +1,6 @@
 [project]
 name = "lemonsqueezy"
-version = "0.1.1"
+version = "0.1.2"
 description = "LemonSqueezy-py-api is an unofficial Python library for interacting with the LemonSqueezy API."
 readme = "README.md"
 requires-python = ">=3.10"
