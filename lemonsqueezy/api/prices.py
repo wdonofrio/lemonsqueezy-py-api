@@ -1,15 +1,15 @@
 import requests
 
-from lemonsqueezy.api import BASE_URL, get_headers
 from lemonsqueezy.api.errors import handle_http_errors
 from lemonsqueezy.models.prices import Price
+from lemonsqueezy.protocols import LemonSqueezyProtocol
 
 
 @handle_http_errors
-def get_price(price_id: str | int) -> Price:
+def get_price(client: LemonSqueezyProtocol, price_id: str | int) -> Price:
     """Get the Price"""
     response = requests.get(
-        f"{BASE_URL}/prices/{price_id}", headers=get_headers(), timeout=30
+        f"{client.base_url}/prices/{price_id}", headers=client.headers, timeout=30
     )
     response.raise_for_status()
     price_data = response.json().get("data", {})
@@ -17,14 +17,14 @@ def get_price(price_id: str | int) -> Price:
 
 
 @handle_http_errors
-def list_prices() -> list[Price]:
+def list_prices(client: LemonSqueezyProtocol) -> list[Price]:
     """List the Prices"""
     prices = []
     page = 1
     while True:
         response = requests.get(
-            f"{BASE_URL}/prices?page[number]={page}&page[size]=10",
-            headers=get_headers(),
+            f"{client.base_url}/prices?page[number]={page}&page[size]=10",
+            headers=client.headers,
             timeout=30,
         )
         response.raise_for_status()

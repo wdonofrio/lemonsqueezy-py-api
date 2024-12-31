@@ -1,15 +1,15 @@
 import requests
 
-from lemonsqueezy.api import BASE_URL, get_headers
 from lemonsqueezy.api.errors import handle_http_errors
 from lemonsqueezy.models.file import File
+from lemonsqueezy.protocols import LemonSqueezyProtocol
 
 
 @handle_http_errors
-def get_file(file_id: str | int) -> File:
+def get_file(client: LemonSqueezyProtocol, file_id: str | int) -> File:
     """Get the File"""
     response = requests.get(
-        f"{BASE_URL}/files/{file_id}", headers=get_headers(), timeout=30
+        f"{client.base_url}/files/{file_id}", headers=client.headers, timeout=30
     )
     response.raise_for_status()
     file_data = response.json().get("data", {})
@@ -17,14 +17,14 @@ def get_file(file_id: str | int) -> File:
 
 
 @handle_http_errors
-def list_files() -> list[File]:
+def list_files(client: LemonSqueezyProtocol) -> list[File]:
     """List the file"""
     file = []
     page = 1
     while True:
         response = requests.get(
-            f"{BASE_URL}/files?page[number]={page}&page[size]=10",
-            headers=get_headers(),
+            f"{client.base_url}/files?page[number]={page}&page[size]=10",
+            headers=client.headers,
             timeout=30,
         )
         response.raise_for_status()

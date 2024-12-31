@@ -54,6 +54,16 @@ variant = client.get_variant(789)
 all_variants = client.list_variants()
 ```
 
+Alternative examples:
+
+```python
+from lemonsqueezy.api.customer import list_customers
+from lemonsqueezy.api.product import list_products
+
+all_customers = list_customers(client)
+all_products = list_products(client)
+```
+
 ## Configuration
 
 You can configure the client using environment variables:
@@ -61,6 +71,14 @@ You can configure the client using environment variables:
 ```env
 LEMONSQUEEZY_API_KEY=your_api_key
 LEMONSQUEEZY_API_URL=https://api.lemonsqueezy.com/v1  # Optional
+```
+
+Then create your client object:
+
+```python
+from lemonsqueezy import LemonSqueezy
+
+client = LemonSqueezy()
 ```
 
 Or pass configuration directly to the client:
