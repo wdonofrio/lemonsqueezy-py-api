@@ -31,10 +31,13 @@ def update_license_key(
     if not license_key_id:
         raise ValueError("License key ID is required in the update payload.")
 
+    # Serialize while excluding None values (applies recursively to nested models)
+    json_payload = payload.model_dump(by_alias=True, exclude_none=True)
+
     response = requests.patch(
         f"{client.base_url}/license-keys/{license_key_id}",
         headers=client.headers,
-        json=payload.model_dump(by_alias=True),
+        json=json_payload,
         timeout=30,
     )
     response.raise_for_status()
