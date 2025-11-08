@@ -14,6 +14,7 @@ An unofficial Python SDK for the LemonSqueezy API. Simplify your integration wit
 - 🏪 Store & Product Management
 - 👥 Customer Data Access
 - 📦 Digital File Management
+- 🔁 Subscription Management
 
 ## Installation
 
@@ -40,6 +41,15 @@ stores = client.list_stores()
 # Get customer information
 customers = client.list_customers()
 
+# Inspect commerce helpers
+checkout = client.get_checkout("ac470bd4-7c41-474d-b6cd-0f296f5be02a")
+discounts = client.list_discounts()
+discount_redemptions = client.list_discount_redemptions()
+
+# Work with orders
+order = client.get_order(123)
+orders = client.list_orders()
+
 # Manage products
 product = client.get_product(123)
 all_products = client.list_products()
@@ -52,6 +62,24 @@ all_files = client.list_files()
 # Work with variants
 variant = client.get_variant(789)
 all_variants = client.list_variants()
+
+# Manage subscriptions
+subscription = client.get_subscription(321)
+subscription_items = client.list_subscription_items()
+subscription_invoices = client.list_subscription_invoices()
+
+# Manage license keys
+license_keys = client.list_license_keys()
+license_key = client.get_license_key(license_keys[0].id_)
+validation = client.validate_license_key(license_key.attributes.key)
+
+activation = client.activate_license_key(
+    license_key.attributes.key, "My Device"
+)
+if activation.activated and activation.instance:
+    client.deactivate_license_key(
+        license_key.attributes.key, activation.instance.id
+    )
 ```
 
 Alternative examples:

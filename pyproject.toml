@@ -1,6 +1,6 @@
 [project]
 name = "lemonsqueezy"
-version = "0.1.2"
+version = "0.2.0"
 description = "LemonSqueezy-py-api is an unofficial Python library for interacting with the LemonSqueezy API."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -19,6 +19,7 @@ dev-dependencies = [
     "pytest-cov>=6.0.0",
     "pytest>=8.3.3",
     "ruff>=0.7.4",
+    "types-requests>=2.32.0.20241016",
 ]
 
 [tool.uv.sources]
